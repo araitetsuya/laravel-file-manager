@@ -1,5 +1,6 @@
 volumes:
   php-fpm-socket:
+  db-store:
 services:
   app:
     build:
@@ -30,3 +31,21 @@ services:
       - type: bind
         source: ./
         target: /app
+
+  db:
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    ports:
+      - 3306:3306
+    volumes:
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel
+      - MYSQL_PASSWORD=laravel
+      - MYSQL_ROOT_PASSWORD=laravel
