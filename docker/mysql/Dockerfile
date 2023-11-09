@@ -1,3 +1,3 @@
-FROM mysql/mysql-server:8.2.0
+FROM mysql:8.2.0
 
 ENV TZ=UTC
