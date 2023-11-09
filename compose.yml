@@ -13,8 +13,8 @@ services:
         volume:
           nocopy: true
       - type: bind
-        source: ./
-        target: /app
+        source: ./laravel
+        target: /laravel
 
   web:
     build:
@@ -29,8 +29,8 @@ services:
         volume:
           nocopy: true
       - type: bind
-        source: ./
-        target: /app
+        source: ./laravel
+        target: /laravel
 
   db:
     build:
