@@ -15,13 +15,23 @@ services:
       - type: bind
         source: ./laravel
         target: /laravel
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-laravel}
+      - DB_USERNAME=${DB_USERNAME:-laravel}
+      - DB_PASSWORD=${DB_PASSWORD:-laravel}
 
   web:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-      - 80:80
+      - target: 80
+        published: ${WEB_PORT:-80}
+        protocol: tcp
+        mode: host
     volumes:
       - type: volume
         source: php-fpm-socket
@@ -37,7 +47,10 @@ services:
       context: .
       dockerfile: docker/mysql/Dockerfile
     ports:
-      - 3306:3306
+      - target: 3306
+        published: ${DB_PORT:-3306}
+        protocol: tcp
+        mode: host
     volumes:
       - type: volume
         source: db-store
@@ -45,7 +58,7 @@ services:
         volume:
           nocopy: true
     environment:
-      - MYSQL_DATABASE=laravel
-      - MYSQL_USER=laravel
-      - MYSQL_PASSWORD=laravel
-      - MYSQL_ROOT_PASSWORD=laravel
+      - MYSQL_DATABASE=${DB_DATABASE:-laravel}
+      - MYSQL_USER=${DB_USERNAME:-laravel}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-laravel}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-laravel}
